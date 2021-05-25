@@ -1,5 +1,5 @@
 import React from "react";
-import { Validate } from "../Data/FormData";
+import { Validate } from "../../Data/FormData";
 function removeItemOnce(arr, value) {
   var index = arr.indexOf(value);
   if (index > -1) {
@@ -94,6 +94,9 @@ export default class StepThree extends React.Component {
               value={values.Department}
               onChange={handleChange("Department")}
             >
+              <option name="dept" value="">
+                SELECT
+              </option>
               <option name="dept" value="ECE">
                 ECE
               </option>

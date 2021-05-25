@@ -1,4 +1,5 @@
 export default class FormData {
+
   constructor() {
     this.firstname = "";
     this.lastname = "";
@@ -15,6 +16,7 @@ export default class FormData {
     this.plusTwo_Certificate = "";
     this.UG_or_PG_Certificate = "";
   }
+
 }
 
 export class Validate {
@@ -105,7 +107,7 @@ export class Validate {
     if (Department === "") {
       this.formErrors["DepartmentErr"] = "Department is required.";
     } else {
-      delete this.formErrors["DistrictErr"];
+      delete this.formErrors["DepartmentErr"];
     }
   }
 }
