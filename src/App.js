@@ -11,6 +11,7 @@ import {
 import LoginPage from "./Component/LoginPage";
 import RegistrationPage from "./Component/RegistrationPage";
 import HomePage from "./Component/HomePage";
+import EditPage from "./Component/EditPage";
 
 export default function App() {
   return (
@@ -33,10 +34,18 @@ export default function App() {
               <Link to="/register">Register</Link>
             </li>
           </ul>
+          <ul>
+            <li>
+              <Link to="/edit">Edit</Link>
+            </li>
+          </ul>
         </nav>
       </div>
 
       <Switch>
+        <Route path="/edit">
+          <EditPage />
+        </Route>
         <Route path="/register">
           <RegistrationPage />
         </Route>
