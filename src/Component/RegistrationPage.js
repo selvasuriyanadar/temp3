@@ -139,7 +139,6 @@ class LowFlowForms extends React.Component {
   render() {
     const { step } = this.state;
     const data = this.props.data[step.value];
-    console.log("rendered");
 
     let buttons = [];
     let value;
