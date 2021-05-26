@@ -1,88 +1,71 @@
 import React from "react";
-import axios from "axios"
+import axios from "axios";
+import PassData from "../Data/PassData";
+import passdata_strings from "../DataStore/Strings/PassData";
 
 export default class LoginPage extends React.Component {
  
   constructor() {
     super();
     this.state = {
-      step: 1,
-      Email: "",
-      Password: "",
-      EmailErr: "",
-      passwordErr: "",
-      data:""
+      passdata: new PassData()
     };
   }
  
-  handleChange = (e) => {
-    const name = e.target.name;
-    this.setState({ [name]: e.target.value });
+  handleChange = (name) => (e) => {
+    const { passdata } = this.state;
+
+    passdata[name] = e.target.value;
+    this.setState({ passdata });
   };
   
   handleSubmit = (e) => {
     e.preventDefault();
-    const { Email, Password } = this.state;
-    if (Email === "") {
-      this.setState({ EmailErr: "Email id is required." });
-    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(Email)) {
-      this.setState({ EmailErr: "Invalid email id." });
-    } else {
-      this.setState({ EmailErr: "" });
-    }
 
-    //password
-    if (Password === "") {
-      this.setState({ passwordErr: "password is required" });
-    } else if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(Password)) {
-      this.setState({
-        PasswordErr:
-          "Check a password between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter."
+    const passdata = this.state.passdata;
+    if (passdata.validate()) {
+      axios.post('http://localhost:5000/login', this.state.passdata)
+      .then(res => {
+        if (res.data.verification === true) {
+          console.log("Login Success");
+        }
       });
-    } else this.setState({ PasswordErr: "" });
-      
-    axios.post('http://localhost:5000/login',{Email:this.state.Email, Password:this.state.Password})
-    .then(res=>{
-      this.setState({data :res.data})
-      console.log(res.data)
-      const { step } = this.state;
-      this.setState({step: 3});
-    
-    })
+    }
+    else {
+      this.setState({ passdata });
+    }
   }
 
   render() {
-    var step = this.state.step;
-    const { data } = this.state
+    const { passdata } = this.state;
+    const { errors } = passdata;
 
     return (
       <div>
         <form>
-          Email:
+          {passdata_strings.email.name}:
           <input
             type="email"
-            placeholder="email address"
-            name="Email"
-            onChange={this.handleChange}
-          />
+            onChange={this.handleChange("email")}
+            value={passdata.email}
+            />
           <div style={{ color: "red", fontSize: "14px" }}>
-            {this.state.EmailErr}
+            {errors.items.email}
           </div>
           <br />
           <br />
-          password:
+          {passdata_strings.password.name}:
           <input
             type="password"
-            placeholder="password"
-            name="Password"
-            onChange={this.handleChange}
-          />
+            onChange={this.handleChange("password")}
+            value={passdata.password}
+            />
           <div style={{ color: "red", fontSize: "14px" }}>
-            {this.state.passwordErr}
+            {errors.items.password}
           </div>
           <br />
           <br />
-          <button onClick={this.handleSubmit}>login</button>
+          <button onClick={this.handleSubmit}>Login</button>
         </form>
       </div>
     );
